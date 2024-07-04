@@ -97,9 +97,7 @@ This module only works for my admins
 ★ 𝐓𝐨𝐭𝐚𝐥 𝐔𝐬𝐞𝐫𝐬: <code>{}</code>
 ★ 𝐓𝐨𝐭𝐚𝐥 𝐂𝐡𝐚𝐭𝐬: <code>{}</code>
 ★ 𝐔𝐬𝐞𝐝 𝐒𝐭𝐨𝐫𝐞𝐠𝐞: <code>{}</code> 𝙼𝚒𝙱
-★ 𝐅𝐫𝐞𝐞 𝐒𝐭𝐨𝐫𝐚𝐠𝐞: <code>{}</code> 𝙼𝚒𝙱
-𝐈𝐟 𝐘𝐨𝐮 𝐇𝐚𝐯𝐞 𝐘𝐨𝐮𝐫 𝐓𝐞𝐥𝐞𝐠𝐫𝐚𝐦 𝐌𝐨𝐯𝐢𝐞 𝐂𝐡𝐚𝐧𝐧𝐞𝐥 𝐓𝐡𝐚𝐧 𝐀𝐝𝐝 𝐘𝐨𝐮𝐫 𝐌𝐨𝐯𝐢𝐞𝐬 𝐅𝐢𝐥𝐞 𝐈𝐧 𝐁𝐨𝐭
-  𝐆𝐨 𝐁𝐚𝐜𝐤 𝐀𝐧𝐝 𝐂𝐡𝐞𝐜𝐤 𝐀𝐮𝐭𝐨 𝐅𝐢𝐥𝐭𝐞𝐫"""
+★ 𝐅𝐫𝐞𝐞 𝐒𝐭𝐨𝐫𝐚𝐠𝐞: <code>{}</code> 𝙼𝚒𝙱"""
     LOG_TEXT_G = """#NewGroup
 Group = {}(<code>{}</code>)
 Total Members = <code>{}</code>
@@ -186,26 +184,26 @@ Example : Loki S01E01
 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 <b>: {}</b>"""
 
     CAPTION = """
-<b>📂 Fɪʟᴇ ɴᴀᴍᴇ : </b> <code>{file_name}</code>
+    <b><a href=https://telegram.me/+_zbzjL-nCYYzYTk1>{file_name}</a>
 
-<b>
-╭─────── • ◆ • ───────╮
-🔅 Dᴀʀᴋ Mᴏᴅᴇ :  <a href="https://t.me/addtheme/DQ_The_File_Donor_Theme">Tᴏᴜᴄʜ</a>
-╰─────── • ◆ • ───────╯
-
-=========== • ✠ • ===========
-▫️ ᴄʜᴀɴɴᴇʟ : @DQ_The_File_Donor_Bot_Updates
-▫️ sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ : @DQ_The_File_Donor_Support
-=========== • ✠ • ===========</b>"""
+🌹Join↝ @moviehub1751
+🌹Search Movie↝ @Movies_0_bot</b>"""
 
     IMDB_TEMPLATE_TXT = """
-<b>Query: {query}
-IMDb Data:
+Hey {message.from_user.mention},
+Here is the result for your <code>{query}</code>
 
-🏷 Title: <a href={url}>{title}</a>
-🎭 Genres: {genres}
-📆 Year: <a href={url}/releaseinfo>{year}</a>
-🌟 Rating: <a href={url}/ratings>{rating}</a> / 10</b>"""
+<b>🏷 Title:</b> <a href={url}>{title}</a>
+
+🎭 <b>Genres:</b> {genres}
+
+🌟 <b>Rating:</b> <a href={url}/ratings>{rating}</a> / 10 (based on {votes} user ratings.)
+
+📀 <b>RunTime:</b> {runtime} Minutes
+
+📆 <b>Release Info:</b>  {release_date}
+
+<b>Powered By↝ @SK_Movies1_Group</b>"""
     
     ALL_FILTERS = """
 <b>Hey {}, These Are My Three Type Of Filters.</b>"""
