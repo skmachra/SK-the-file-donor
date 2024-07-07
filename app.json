@@ -20,11 +20,11 @@
     "env": {
         "BOT_TOKEN": {
             "description": "Your bot token.",
-            "required": false
+            "required": true
         },
         "API_ID": {
             "description": "Get this value from https://my.telegram.org",
-            "required": false
+            "required": true
         },
         "API_HASH": {
             "description": "Get this value from https://my.telegram.org",
