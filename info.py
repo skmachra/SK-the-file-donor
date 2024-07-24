@@ -21,14 +21,12 @@ BOT_TOKEN = environ['BOT_TOKEN']
 CACHE_TIME = int(environ.get('CACHE_TIME', 300))
 USE_CAPTION_FILTER = is_enabled((environ.get('USE_CAPTION_FILTER', 'True')), True)
 
-PICS = (environ.get('PICS', 'https://telegra.ph/file/6a0726f79acd8300e9a04.jpg https://telegra.ph/file/68289fefb76dbc43b766d.jpg https://telegra.ph/file/0caad29c0cf91c23fb1b6.jpg https://telegra.ph/file/8c34c755dd16581c1c6b5.jpg https://telegra.ph/file/365e35b554e5a3ea83857.jpg https://telegra.ph/file/07f185825c5b7bfd6fbfb.jpg https://telegra.ph/file/85f95494565a762edb3e7.jpg https://telegra.ph/file/708a1d6ce805fcc6a46d0.jpg https://telegra.ph/file/d799c1a964f211028cc97.jpg https://telegra.ph/file/b987425b80bca0cf45c7e.jpg https://telegra.ph/file/2a8b3779760289b76de24.jpg https://telegra.ph/file/47961be968719b3e24cf0.jpg https://telegra.ph/file/2e127b0f6b1810d733c09.jpg https://telegra.ph/file/281b18770a43a29120252.jpg https://telegra.ph/file/2086dd2aa8382e758a599.jpg https://telegra.ph/file/fcc849db4bf5c517f0f8d.jpg')).split()
+PICS = (environ.get('PICS', 'https://telegra.ph/file/addaa44a5d2a1471d4067.jpg https://telegra.ph/file/712d5c4a6ef0c3ef114f3.jpg https://telegra.ph/file/b3b9a8f2049e86f34d1f4.jpg https://telegra.ph/file/6adb3c99f3c27f37b55a6.jpg https://telegra.ph/file/99cd7ca881e9ca758c96f.jpg https://telegra.ph/file/b670973343474ec799ced.jpg https://telegra.ph/file/2c92ac6d301d179756806.jpg https://telegra.ph/file/fb50ea16ce5887db825a4.jpg https://telegra.ph/file/dee7ba61d1c1182796217.jpg https://telegra.ph/file/51309eba5464abdf77dc2.jpg https://telegra.ph/file/e12351b9025399165c416.jpg https://telegra.ph/file/70b71d72cb5fd7ad1a0df.jpg https://telegra.ph/file/840d5140aca3c381cc609.jpg https://telegra.ph/file/ac9d13a8f70a2f4843a7a.jpg https://telegra.ph/file/70037eccdf8ddb9c0f867.jpg https://telegra.ph/file/d4fbc24cbb653f1cd6e72.jpg https://telegra.ph/file/6f152a9ef504b3dbf1949.jpg https://telegra.ph/file/7e108a8d747945ec291a6.jpg https://telegra.ph/file/7562da1188a262ccac2e0.jpg https://telegra.ph/file/f9e6e13c46b5901bea6db.jpg https://telegra.ph/file/2c8cdf6c6d245ff794691.jpg https://telegra.ph/file/998de1b696d8c54bcad67.jpg https://telegra.ph/file/023d942fc0aaf72820a08.jpg https://telegra.ph/file/68809386e07353baa3ba3.jpg https://telegra.ph/file/61be1fcf830aa61611ca2.jpg https://telegra.ph/file/a3817647210bb84278580.jpg https://telegra.ph/file/e1eedef42acd963c05992.jpg https://telegra.ph/file/807752b7455d37221fa00.jpg https://telegra.ph/file/c62c9792e142eb00df236.jpg https://telegra.ph/file/256def54a6d455d93c112.jpg https://telegra.ph/file/4c4ebcbf105a41226e72f.jpg https://telegra.ph/file/8a0329d3a1308d51bb2b9.jpg https://telegra.ph/file/e31062ebfe85994f4f515.jpg https://telegra.ph/file/77738e815a125fbf0d2d6.jpg https://telegra.ph/file/8f1b284da7bb6f140d281.jpg https://telegra.ph/file/11cddff43d5f56022bb74.jpg https://telegra.ph/file/bc5daadc62f661db8dc47.jpg https://telegra.ph/file/59bd23c86f7c20916eb67.jpg https://telegra.ph/file/0ed28dac3e3fa8bbee353.jpg https://telegra.ph/file/2e9cfe49b3dac80b4ac11.jpg https://telegra.ph/file/c032ae1b61dc0cb1cf5af.jpg https://telegra.ph/file/6a777d53c5b18c5cb4dae.jpg https://telegra.ph/file/e4892d436301b77bf41c4.jpg https://telegra.ph/file/f2912761fec5e8a4e0639.jpg https://telegra.ph/file/2d33e85c8bfb448da509b.jpg https://telegra.ph/file/4a73338115f5500eb7ba4.jpg https://telegra.ph/file/b32ae8a6c3860f43c59c1.jpg https://telegra.ph/file/f865c26121556e1dc0d19.jpg https://telegra.ph/file/a4bb3dbf75aacb5aea401.jpg https://telegra.ph/file/c8adb06c86f25b0601b32.jpg https://telegra.ph/file/ac498d28bb9d2dbf6fd37.jpg https://telegra.ph/file/e661b38760c25af670f78.jpg https://telegra.ph/file/dc56e071a39c3a6ab9c70.jpg https://telegra.ph/file/f4ae69047c30cd1961412.jpg https://telegra.ph/file/da28b8483b650d5798a68.jpg https://telegra.ph/file/60df5254f5d416c2e4c04.jpg https://telegra.ph/file/bebd13efbc14d7edad736.jpg https://telegra.ph/file/3afdf9329057443c81c82.jpg https://telegra.ph/file/047e20327b8c86e9f833f.jpg https://telegra.ph/file/8e0dc67c3289c12403033.jpg https://telegra.ph/file/bae94da8c2ab3bdda6c69.jpg https://telegra.ph/file/9d07c8f21f792cd1e5cc8.jpg https://telegra.ph/file/71dcda14cf51f6176cae6.jpg https://telegra.ph/file/3a1356a7ee980f5c7192c.jpg https://telegra.ph/file/a823ab33949da3c4bf60b.jpg https://telegra.ph/file/70ac2f0dde544c1c3870d.jpg https://telegra.ph/file/a7a6c5133551d8e0ecb38.jpg')).split()
 NOR_IMG = environ.get("NOR_IMG", "https://telegra.ph/file/46443096bc6895c74a716.jpg")
 MELCOW_VID = environ.get("MELCOW_VID", "https://telegra.ph/file/451f038b4e7c2ddd10dc0.mp4")
 SPELL_IMG = environ.get("SPELL_IMG", "https://telegra.ph/file/5e2d4418525832bc9a1b9.jpg")
 
 # Admins, Channels & Users
-support_chat_id = environ.get('SUPPORT_CHAT_ID')
-SUPPORT_CHAT_ID = int(support_chat_id) if support_chat_id and id_pattern.search(support_chat_id) else None
 ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '').split()]
 CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '0').split()]
 auth_users = [int(user) if id_pattern.search(user) else user for user in environ.get('AUTH_USERS', '').split()]
@@ -37,9 +35,10 @@ auth_channel = environ.get('AUTH_CHANNEL')
 auth_grp = environ.get('AUTH_GROUP')
 AUTH_CHANNEL = int(auth_channel) if auth_channel and id_pattern.search(auth_channel) else None
 AUTH_GROUPS = [int(ch) for ch in auth_grp.split()] if auth_grp else None
+support_chat_id = environ.get('SUPPORT_CHAT_ID')
 reqst_channel = environ.get('REQST_CHANNEL_ID')
 REQST_CHANNEL = int(reqst_channel) if reqst_channel and id_pattern.search(reqst_channel) else None
-SUPPORT_CHAT_ID = int(environ.get('SUPPORT_CHAT_ID'))
+SUPPORT_CHAT_ID = int(support_chat_id) if support_chat_id and id_pattern.search(support_chat_id) else None
 NO_RESULTS_MSG = is_enabled((environ.get("NO_RESULTS_MSG", 'False')), False)
 
 # MongoDB information
@@ -49,7 +48,7 @@ COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Telegram_files')
 
 # Others
 IS_VERIFY = is_enabled((environ.get('IS_VERIFY', 'False')), False)
-HOW_TO_VERIFY = environ.get('HOW_TO_VERIFY', "https://t.me/c/1845700490/3")
+HOW_TO_VERIFY = environ.get('HOW_TO_VERIFY', "https://t.me/moviehub1753/52")
 VERIFY2_URL = environ.get('VERIFY2_URL', "mdisklink.link")
 VERIFY2_API = environ.get('VERIFY2_API', "4fa150d44b4bf6579c24b33bbbb786dbfb4fc673")
 SHORTLINK_URL = environ.get('SHORTLINK_URL', 'clicksfly.com')
@@ -59,8 +58,8 @@ DELETE_CHANNELS = [int(dch) if id_pattern.search(dch) else dch for dch in enviro
 MAX_B_TN = environ.get("MAX_B_TN", "5")
 MAX_BTN = is_enabled((environ.get('MAX_BTN', "True")), True)
 PORT = environ.get("PORT", "8080")
-GRP_LNK = environ.get('GRP_LNK', 'https://t.me/+GOFte-Rz2tcxODg1')
-CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/+mCMdCb_ymAowZmNl')
+GRP_LNK = environ.get('GRP_LNK', 'https://t.me/SK_Movies1_Group')
+CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/SK_Movies1')
 MSG_ALRT = environ.get('MSG_ALRT', 'Wʜᴀᴛ Aʀᴇ Yᴏᴜ Lᴏᴏᴋɪɴɢ Aᴛ ?')
 LOG_CHANNEL = int(environ.get('LOG_CHANNEL', 0))
 SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'DQ_The_File_Donor_Support')
