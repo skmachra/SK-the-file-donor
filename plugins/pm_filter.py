@@ -442,7 +442,7 @@ async def advantage_spoll_choker(bot, query):
     files, offset, total_results = await get_search_results(query.message.chat.id, movie, offset=0, filter=True)
     if files:
         k = (movie, files, offset, total_results)
-        await auto_filter(bot, query, k)
+        await auto_filter(bot, query)
     else:
         if NO_RESULTS_MSG:
             reqstr1 = query.from_user.id if query.from_user else 0
