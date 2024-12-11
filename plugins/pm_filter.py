@@ -412,8 +412,8 @@ async def select_language(bot, query):
 
 @Client.on_callback_query(filters.regex(r"^spol"))
 async def advantage_spoll_choker(bot, query):
-    _, user, movie_ = query.data.split('#')
-    movies = SPELL_CHECK.get(query.message.id)
+    _, user, mv, movie_ = query.data.split('#')
+    movies = SPELL_CHECK.get(int(mv))
     if not movies:
         return await query.answer(script.OLD_ALRT_TXT.format(query.from_user.first_name), show_alert=True)
     if int(user) != 0 and query.from_user.id != int(user):
@@ -1744,12 +1744,12 @@ async def advantage_spell_chok(client, msg):
         [
             InlineKeyboardButton(
                 text=movie_name.strip(),
-                callback_data=f"spol#{reqstr1}#{k}",
+                callback_data=f"spol#{reqstr1}#{mv_id}#{k}",
             )
         ]
         for k, movie_name in enumerate(movielist)
     ]
-    btn.append([InlineKeyboardButton(text="Close", callback_data=f'spol#{reqstr1}#close_spellcheck')])
+    btn.append([InlineKeyboardButton(text="Close", callback_data=f'spol#{reqstr1}#7#close_spellcheck')])
     spell_check_del = await msg.reply_photo(
         photo=(SPELL_IMG),
         caption=(script.CUDNT_FND.format(mv_rqst)),
