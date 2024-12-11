@@ -42,7 +42,7 @@ temp_settings = {
   'button': False,
   'botpm': False,
   'file_secure': False,
-  'imdb': False,
+  'imdb': True,
   'spell_check': True,
   'welcome': True,
   'template':
@@ -1740,6 +1740,7 @@ async def auto_filter(client, msg, spoll=False):
                 return
         else:
             message = msg.message.reply_to_message  # msg will be callback query
+            print(msg.chat.id)
             search, files, offset, total_results = spoll
             if message and message.chat and hasattr(message.chat, 'id'):
                 settings = await get_settings(message.chat.id)
