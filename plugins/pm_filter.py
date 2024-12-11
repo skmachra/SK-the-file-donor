@@ -1711,8 +1711,34 @@ async def cb_handler(client: Client, query: CallbackQuery):
     if spoll:
         await msg.message.delete()"""
 
+def handle_message_or_callback(update, context):
+    # Check if it's a CallbackQuery or a Message
+    if isinstance(update, CallbackQuery):
+        msg = update.message  # For CallbackQuery, use message from the callback
+    elif isinstance(update, Message):
+        msg = update  # For Message, use the message directly
+
+    # Check if the message is a reply and if the chat type is 'private'
+    if isinstance(msg, Message):  # Make sure it's a Message object
+        if msg.chat.type == 'private':
+            # It's a private chat
+            print("This is a private chat")
+        
+        if msg.reply_to_message and msg.reply_to_message.chat.type == 'private':
+            # It's a reply to a private chat
+            print("This is a reply in a private chat")
+    
+    # You could also check for callback queries
+    elif isinstance(update, CallbackQuery):
+        # Callback query received in a private chat
+        if update.message.chat.type == 'private':
+            print("Callback received in private chat")
+
+
+
 async def auto_filter(client, msg, spoll=False):
-    if not msg.chat.id<0 or not msg.message.reply_to_message.chat.id<0:
+    handle_message_or_callback(msg, client)
+    if not msg.chat.type=="private" or not msg.reply_to_message.chat=="private":
         reqstr1 = msg.from_user.id if msg.from_user else 0
         reqstr = await client.get_users(reqstr1)
         if not spoll:
