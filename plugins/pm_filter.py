@@ -1487,15 +1487,17 @@ async def auto_filter(client, msg, spoll=False):
     if not spoll:
         message = msg
         if message and message.chat and hasattr(message.chat, 'id'):
+            chat_i = message.chat.id
             settings = await get_settings(message.chat.id)
         else:
             settings = temp_settings
+            chat_i = message.id
         if message.text.startswith("/"): return  # ignore commands
         if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
             return
         if len(message.text) < 100:
             search = message.text
-            files, offset, total_results = await get_search_results(message.message.chat.id ,search.lower(), offset=0, filter=True)
+            files, offset, total_results = await get_search_results(chat_i ,search.lower(), offset=0, filter=True)
             if not files:
                 if settings["spell_check"]:
                     return await advantage_spell_chok(client, msg)
