@@ -1716,7 +1716,7 @@ async def auto_filter(client, msg, spoll=False):
         message = msg
     else:
         message = msg.message.reply_to_message
-    if Type(message) == Type(None):
+    if type(message) == type(None):
         print("From PM")
         reqstr1 = msg.from_user.id if msg.from_user else 0
         reqstr = await client.get_users(reqstr1)
