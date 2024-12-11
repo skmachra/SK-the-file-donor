@@ -37,6 +37,21 @@ logger.setLevel(logging.ERROR)
 BUTTONS = {}
 SPELL_CHECK = {}
 
+temp_settings = {
+  'button': False,
+  'botpm': False,
+  'file_secure': False,
+  'imdb': True,
+  'spell_check': True,
+  'welcome': True,
+  'template':
+    "Hey {message.from_user.mention},\nHere is the result for your <code>{query}</code>\n\n<b>🏷 Title</b>: <a href={url}>{title}</a>\n\n🎭 Genres: {genres}\n\n📆 Year: <a href={url}/releaseinfo>{year}</a>\n\n🌟 Rating: <a href={url}/ratings>{rating}</a> / 10 (based on {votes} user ratings.)\n\n📀 RunTime: {runtime} Minutes\n\n📆 Release Info : {release_date}\n\nPowered By↝ <b>@SKMovies_Request</b>",
+  'max_btn': True,
+  'auto_ffilter': True,
+  'is_shortlink': False,
+  'auto_delete': True,
+}
+
 @Client.on_message((filters.group | filters.private) & filters.text & filters.incoming)
 async def give_filter(client, message):
     if message.chat.id != SUPPORT_CHAT_ID:
@@ -1490,8 +1505,7 @@ async def auto_filter(client, msg, spoll=False):
     else:
         message = msg.message.reply_to_message  # msg will be callback query
         search, files, offset, total_results = spoll
-        settings = await get_settings(message.chat.id)
-        print(settings)
+        settings = await get_settings(message.chat.id) if message.chat.id else temp_settings
     temp.SEND_ALL_TEMP[message.from_user.id] = files
     temp.KEYWORD[message.from_user.id] = search
     if 'is_shortlink' in settings.keys():
