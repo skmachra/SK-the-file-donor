@@ -42,11 +42,11 @@ temp_settings = {
   'button': False,
   'botpm': False,
   'file_secure': False,
-  'imdb': True,
+  'imdb': False,
   'spell_check': True,
   'welcome': True,
   'template':
-    "Hey {message.from_user.mention},\nHere is the result for your <code>{query}</code>\n\n<b>🏷 Title</b>: <a href={url}>{title}</a>\n\n🎭 Genres: {genres}\n\n📆 Year: <a href={url}/releaseinfo>{year}</a>\n\n🌟 Rating: <a href={url}/ratings>{rating}</a> / 10 (based on {votes} user ratings.)\n\n📀 RunTime: {runtime} Minutes\n\n📆 Release Info : {release_date}\n\nPowered By↝ <b>@SKMovies_Request</b>",
+    "Hey ,\nHere is the result for your <code>{query}</code>\n\n<b>🏷 Title</b>: <a href={url}>{title}</a>\n\n🎭 Genres: {genres}\n\n📆 Year: <a href={url}/releaseinfo>{year}</a>\n\n🌟 Rating: <a href={url}/ratings>{rating}</a> / 10 (based on {votes} user ratings.)\n\n📀 RunTime: {runtime} Minutes\n\n📆 Release Info : {release_date}\n\nPowered By↝ <b>@SKMovies_Request</b>",
   'max_btn': True,
   'auto_ffilter': True,
   'is_shortlink': False,
