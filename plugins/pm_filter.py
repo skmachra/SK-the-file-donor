@@ -1740,14 +1740,11 @@ async def auto_filter(client, msg, spoll=False):
                 return
         else:
             message = msg.message.reply_to_message  # msg will be callback query
-            print(msg.chat.id)
             search, files, offset, total_results = spoll
-            if message and message.chat and hasattr(message.chat, 'id'):
-                settings = await get_settings(message.chat.id)
-            else:
-                settings = temp_settings
-        #temp.SEND_ALL_TEMP[message.from_user.id] = files
-        #temp.KEYWORD[message.from_user.id] = search
+            settings = temp_settings
+            userid = str(uuid.uuid4())
+        temp.SEND_ALL_TEMP[userid] = files
+        temp.KEYWORD[userid] = search
         if 'is_shortlink' in settings.keys():
             ENABLE_SHORTLINK = settings['is_shortlink']
         else:
@@ -1827,7 +1824,7 @@ async def auto_filter(client, msg, spoll=False):
             )
 
         btn.insert(0, [
-            InlineKeyboardButton("! Send All To PM !", callback_data=f"send_fall#{pre}#{0}#{89}")
+            InlineKeyboardButton("! Send All To PM !", callback_data=f"send_fall#{pre}#{0}#{userid}")
         ])
 
         btn.insert(0, [
