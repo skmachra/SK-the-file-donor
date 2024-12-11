@@ -1717,7 +1717,6 @@ async def auto_filter(client, msg, spoll=False):
     else:
         message = msg.message.reply_to_message
     if type(message) == type(None):
-        print("From PM")
         reqstr1 = msg.from_user.id if msg.from_user else 0
         reqstr = await client.get_users(reqstr1)
         if not spoll:
@@ -1745,12 +1744,12 @@ async def auto_filter(client, msg, spoll=False):
                 settings = await get_settings(message.chat.id)
             else:
                 settings = temp_settings
-        temp.SEND_ALL_TEMP[message.from_user.id] = files
-        temp.KEYWORD[message.from_user.id] = search
+        #temp.SEND_ALL_TEMP[message.from_user.id] = files
+        #temp.KEYWORD[message.from_user.id] = search
         if 'is_shortlink' in settings.keys():
             ENABLE_SHORTLINK = settings['is_shortlink']
         else:
-            await save_group_settings(message.chat.id, 'is_shortlink', False)
+            #await save_group_settings(message.chat.id, 'is_shortlink', False)
             ENABLE_SHORTLINK = False
         pre = 'filep' if settings['file_secure'] else 'file'
         if ENABLE_SHORTLINK and settings["button"]:
@@ -1816,7 +1815,7 @@ async def auto_filter(client, msg, spoll=False):
                     ]
                 )       
         except KeyError:
-            await save_group_settings(message.chat.id, 'auto_delete', True)
+            #await save_group_settings(message.chat.id, 'auto_delete', True)
             btn.insert(0, 
                 [
                     InlineKeyboardButton(f'Info', 'reqinfo'),
@@ -1826,7 +1825,7 @@ async def auto_filter(client, msg, spoll=False):
             )
 
         btn.insert(0, [
-            InlineKeyboardButton("! Send All To PM !", callback_data=f"send_fall#{pre}#{0}#{message.from_user.id}")
+            InlineKeyboardButton("! Send All To PM !", callback_data=f"send_fall#{pre}#{0}#{89}")
         ])
 
         btn.insert(0, [
@@ -1834,7 +1833,7 @@ async def auto_filter(client, msg, spoll=False):
         ])
 
         if offset != "":
-            key = f"{message.chat.id}-{message.id}"
+            key = str(uuid.uuid4())
             BUTTONS[key] = search
             req = message.from_user.id if message.from_user else 0
             try:
@@ -1847,7 +1846,7 @@ async def auto_filter(client, msg, spoll=False):
                         [InlineKeyboardButton("📃 𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/int(MAX_B_TN))}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
                     )
             except KeyError:
-                await save_group_settings(message.chat.id, 'max_btn', True)
+                #await save_group_settings(message.chat.id, 'max_btn', True)
                 btn.append(
                     [InlineKeyboardButton("📃 𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/10)}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
                 )
@@ -1890,7 +1889,7 @@ async def auto_filter(client, msg, spoll=False):
                 **locals()
             )
         else:
-            cap = f"<b>Hᴇʏ {message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>"
+            cap = f"<b>Hᴇʏ, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>"
         if imdb and imdb.get('poster'):
             try:
                 hehe = await message.reply_photo(photo=imdb.get('poster'), caption=cap[:1024], reply_markup=InlineKeyboardMarkup(btn))
@@ -1900,7 +1899,7 @@ async def auto_filter(client, msg, spoll=False):
                         await hehe.delete()
                         await message.delete()
                 except KeyError:
-                    await save_group_settings(message.chat.id, 'auto_delete', True)
+                    #await save_group_settings(message.chat.id, 'auto_delete', True)
                     await asyncio.sleep(600)
                     await hehe.delete()
                     await message.delete()
@@ -1914,7 +1913,7 @@ async def auto_filter(client, msg, spoll=False):
                         await hmm.delete()
                         await message.delete()
                 except KeyError:
-                    await save_group_settings(message.chat.id, 'auto_delete', True)
+                    #await save_group_settings(message.chat.id, 'auto_delete', True)
                     await asyncio.sleep(600)
                     await hmm.delete()
                     await message.delete()
@@ -1927,7 +1926,7 @@ async def auto_filter(client, msg, spoll=False):
                         await fek.delete()
                         await message.delete()
                 except KeyError:
-                    await save_group_settings(message.chat.id, 'auto_delete', True)
+                    #await save_group_settings(message.chat.id, 'auto_delete', True)
                     await asyncio.sleep(600)
                     await fek.delete()
                     await message.delete()
@@ -1939,14 +1938,13 @@ async def auto_filter(client, msg, spoll=False):
                     await fuk.delete()
                     await message.delete()
             except KeyError:
-                await save_group_settings(message.chat.id, 'auto_delete', True)
+                #await save_group_settings(message.chat.id, 'auto_delete', True)
                 await asyncio.sleep(600)
                 await fuk.delete()
                 await message.delete()
         if spoll:
             await msg.message.delete()
     else:
-        print("From gp or pm with no spel")
         reqstr1 = msg.from_user.id if msg.from_user else 0
         reqstr = await client.get_users(reqstr1)
         if not spoll:
