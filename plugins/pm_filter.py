@@ -442,7 +442,7 @@ async def advantage_spoll_choker(bot, query):
     files, offset, total_results = await get_search_results(query.message.chat.id, movie, offset=0, filter=True)
     if files:
         k = (movie, files, offset, total_results)
-        await auto_filter(bot, query)
+        await auto_filter(bot, query, k)
     else:
         if NO_RESULTS_MSG:
             reqstr1 = query.from_user.id if query.from_user else 0
@@ -1486,18 +1486,13 @@ async def auto_filter(client, msg, spoll=False):
     reqstr = await client.get_users(reqstr1)
     if not spoll:
         message = msg
-        if message and message.chat and hasattr(message.chat, 'id'):
-            chat_i = message.chat.id
-            settings = await get_settings(message.chat.id)
-        else:
-            settings = temp_settings
-            chat_i = message.id
+        settings = await get_settings(message.chat.id)
         if message.text.startswith("/"): return  # ignore commands
         if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
             return
         if len(message.text) < 100:
             search = message.text
-            files, offset, total_results = await get_search_results(chat_i ,search.lower(), offset=0, filter=True)
+            files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), offset=0, filter=True)
             if not files:
                 if settings["spell_check"]:
                     return await advantage_spell_chok(client, msg)
@@ -1514,6 +1509,7 @@ async def auto_filter(client, msg, spoll=False):
             settings = await get_settings(message.chat.id)
         else:
             settings = temp_settings
+            print(message)
     temp.SEND_ALL_TEMP[message.from_user.id] = files
     temp.KEYWORD[message.from_user.id] = search
     if 'is_shortlink' in settings.keys():
