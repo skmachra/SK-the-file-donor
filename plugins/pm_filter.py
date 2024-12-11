@@ -1836,7 +1836,7 @@ async def auto_filter(client, msg, spoll=False):
         if offset != "":
             key = str(uuid.uuid4())
             BUTTONS[key] = search
-            req = message.from_user.id if message.from_user else 0
+            req = 09
             try:
                 if settings['max_btn']:
                     btn.append(
