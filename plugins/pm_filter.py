@@ -1712,8 +1712,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await msg.message.delete()"""
 
 async def auto_filter(client, msg, spoll=False):
-    print(msg.from_user.id, msg.chat.id)
-    if not msg.from_user.id>0:
+    if not spoll:
+        message = msg
+    else:
+        message = msg.message.reply_to_message
+    print(message.from_user.id, message.chat.id)
+    if not message.from_user.id>0:
         reqstr1 = msg.from_user.id if msg.from_user else 0
         reqstr = await client.get_users(reqstr1)
         if not spoll:
