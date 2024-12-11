@@ -1716,8 +1716,8 @@ async def auto_filter(client, msg, spoll=False):
         message = msg
     else:
         message = msg.message.reply_to_message
-    print(message.chat.id)
-    if not message.from_user.id>0:
+    if Type(message) == Type(None):
+        print("From PM")
         reqstr1 = msg.from_user.id if msg.from_user else 0
         reqstr = await client.get_users(reqstr1)
         if not spoll:
@@ -1946,6 +1946,7 @@ async def auto_filter(client, msg, spoll=False):
         if spoll:
             await msg.message.delete()
     else:
+        print("From gp or pm with no spel")
         reqstr1 = msg.from_user.id if msg.from_user else 0
         reqstr = await client.get_users(reqstr1)
         if not spoll:
