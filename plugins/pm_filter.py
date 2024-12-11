@@ -1712,7 +1712,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await msg.message.delete()"""
 
 async def auto_filter(client, msg, spoll=False):
-    if not msg.chat.type=="private" or not msg.reply_to_message.chat=="private":
+    if not msg.chat.type=="private":
         reqstr1 = msg.from_user.id if msg.from_user else 0
         reqstr = await client.get_users(reqstr1)
         if not spoll:
