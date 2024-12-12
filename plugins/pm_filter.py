@@ -1509,7 +1509,7 @@ async def auto_filter(client, msg, spoll=False):
             else:
                 return
         else:
-            message = msg.message.reply_to_message  # msg will be callback query
+            message = msg.message  # msg will be callback query
             search, files, offset, total_results = spoll
             settings = temp_settings
             userid = random.randint(100000000, 999999999)
