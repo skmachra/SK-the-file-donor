@@ -1483,10 +1483,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
 async def auto_filter(client, msg, spoll=False):
     if not spoll:
-        message = msg
+        mes = msg
     else:
-        message = msg.message.reply_to_message
-    if msg.message.chat.type == "ChatType.PRIVATE":
+        mes = msg.message.reply_to_message
+    if type(mes) == type(None):
         reqstr1 = msg.from_user.id if msg.from_user else 0
         reqstr = await client.get_users(reqstr1)
         if not spoll:
