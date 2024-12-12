@@ -36,6 +36,20 @@ logger.setLevel(logging.ERROR)
 
 BUTTONS = {}
 SPELL_CHECK = {}
+temp_settings = {
+  'button': True,
+  'botpm': False,
+  'file_secure': False,
+  'imdb': True,
+  'spell_check': True,
+  'welcome': True,
+  'template':
+    "Hey {msg.from_user.mention},\nHere is the result for your <code>{query}</code>\n\n<b>🏷 Title</b>: <a href={url}>{title}</a>\n\n🎭 Genres: {genres}\n\n📆 Year: <a href={url}/releaseinfo>{year}</a>\n\n🌟 Rating: <a href={url}/ratings>{rating}</a> / 10 (based on {votes} user ratings.)\n\n📀 RunTime: {runtime} Minutes\n\n📆 Release Info : {release_date}\n\nPowered By↝ <b>@SKMovies_Request</b>",
+  'max_btn': True,
+  'auto_ffilter': True,
+  'is_shortlink': False,
+  'auto_delete': True,
+}
 
 @Client.on_message((filters.group | filters.private) & filters.text & filters.incoming)
 async def give_filter(client, message):
@@ -410,101 +424,40 @@ async def select_language(bot, query):
         pass
     await query.answer()
 
-#@Client.on_callback_query(filters.regex(r"^spol"))
-#async def advantage_spoll_choker(bot, query):
-#    _, user, movie_ = query.data.split('#')
- #   movies = SPELL_CHECK.get(query.message.reply_to_message.id)
- #   if not movies:
-#        return await query.answer(script.OLD_ALRT_TXT.format(query.from_user.first_name), show_alert=True)
-#    if int(user) != 0 and query.from_user.id != int(user):
-#        return await query.answer(script.ALRT_TXT.format(query.from_user.first_name), show_alert=True)
-#    if movie_ == "close_spellcheck":
- #       return await query.message.delete()
- #   movie = movies[(int(movie_))]
- #   await query.answer(script.TOP_ALRT_MSG)
- #   gl = await global_filters(bot, query.message, text=movie)
- #   if gl == False:
- #       k = await manual_filters(bot, query.message, text=movie)
-  #      if k == False:
-  #          files, offset, total_results = await get_search_results(query.message.chat.id, movie, offset=0, filter=True)
-     #       if files:
-  #              k = (movie, files, offset, total_results)
-   #             await auto_filter(bot, query, k)
-   #         else:
-     #           reqstr1 = query.from_user.id if query.from_user else 0
-     #           reqstr = await bot.get_users(reqstr1)
-     #           if NO_RESULTS_MSG:
-     #               await bot.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, movie)))
-     #           k = await query.message.edit(script.MVE_NT_FND)
-      #          await asyncio.sleep(10)
-      #          await k.delete()
-
 @Client.on_callback_query(filters.regex(r"^spol"))
 async def advantage_spoll_choker(bot, query):
-    if query.message.chat.type == "private":
-        _, user, movie_ = query.data.split('#')
-        movies = SPELL_CHECK.get(query.message.reply_to_message.id)
-        if not movies:
-            return await query.answer(script.OLD_ALRT_TXT.format(query.from_user.first_name), show_alert=True)
-            if int(user) != 0 and query.from_user.id != int(user):
-                return await query.answer(script.ALRT_TXT.format(query.from_user.first_name), show_alert=True)
-                if movie_ == "close_spellcheck":
-                    return await query.message.delete()
-                    movie = movies[(int(movie_))]
-                    await query.answer(script.TOP_ALRT_MSG)
-                    gl = await global_filters(bot, query.message, text=movie)
-                    if gl == False:
-                        k = await manual_filters(bot, query.message, text=movie)
-                        if k == False:
-                            files, offset, total_results = await get_search_results(query.message.chat.id, movie, offset=0, filter=True)
-                            if files:
-                                k = (movie, files, offset, total_results)
-                                await auto_filter(bot, query, k)
-                            else:
-                                reqstr1 = query.from_user.id if query.from_user else 0
-                                reqstr = await bot.get_users(reqstr1)
-                                if NO_RESULTS_MSG:
-                                    await bot.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, movie)))
-                                    if query.message.chat.type == "private":
-                                        response_text = script.MVE_NT_FND
-                                        await bot.send_message(chat_id=query.from_user.id, text=response_text)
-                                    else:
-                                        k = await query.message.reply_text(script.MVE_NT_FND)
-                                        await asyncio.sleep(10)
-                                        await k.delete()
+    _, user, mv, movie_ = query.data.split('#')
+    movies = SPELL_CHECK.get(int(mv))
+    if not movies:
+        return await query.answer(script.OLD_ALRT_TXT.format(query.from_user.first_name), show_alert=True)
+    if int(user) != 0 and query.from_user.id != int(user):
+        return await query.answer(script.ALRT_TXT.format(query.from_user.first_name), show_alert=True)
+    if movie_ == "close_spellcheck":
+        return await query.message.delete()
+    movie = movies[(int(movie_))]
+    await query.answer(script.TOP_ALRT_MSG)
+    gl = await global_filters(bot, query.message, text=movie)
+    manual = await manual_filters(bot, query.message, text=movie)
+    files, offset, total_results = await get_search_results(query.message.chat.id, movie, offset=0, filter=True)
+    if files:
+        k = (movie, files, offset, total_results)
+        await auto_filter(bot, query, k)
     else:
-        _, user, movie_ = query.data.split('#')
-        movies = SPELL_CHECK.get(query.message.reply_to_message.id)
-        if not movies:
-            return await query.answer(script.OLD_ALRT_TXT.format(query.from_user.first_name), show_alert=True)
-            if int(user) != 0 and query.from_user.id != int(user):
-                return await query.answer(script.ALRT_TXT.format(query.from_user.first_name), show_alert=True)
-                if movie_ == "close_spellcheck":
-                    return await query.message.delete()
-                    movie = movies[(int(movie_))]
-                    await query.answer(script.TOP_ALRT_MSG)
-                    gl = await global_filters(bot, query.message, text=movie)
-                    if gl == False:
-                        k = await manual_filters(bot, query.message, text=movie)
-                        if k == False:
-                            files, offset, total_results = await get_search_results(query.message.chat.id, movie, offset=0, filter=True)
-                              if files:
-                                k = (movie, files, offset, total_results)
-                                await auto_filter(bot, query, k)
-                            else:
-                                reqstr1 = query.from_user.id if query.from_user else 0
-                                reqstr = await bot.get_users(reqstr1)
-                                if NO_RESULTS_MSG:
-                                    await bot.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, movie)))
-                                    if query.message.chat.type == "private":
-                                        response_text = script.MVE_NT_FND
-                                        await bot.send_message(chat_id=query.from_user.id, text=response_text)
-                                    else:
-                                        k = await query.message.reply_text(script.MVE_NT_FND)
-                                        await asyncio.sleep(10)
-                                        await k.delete()
-                    
-
+        if NO_RESULTS_MSG:
+            reqstr1 = query.from_user.id if query.from_user else 0
+            reqstr = await bot.get_users(reqstr1)
+            await bot.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, movie)))
+        k_msg = await query.message.edit(script.MVE_NT_FND)
+        await asyncio.sleep(10)
+        await k_msg.delete()
+        await asyncio.sleep(590)
+    if gl:
+        await gl.delete()
+    if manual:
+        await manual.delete()
+    await asyncio.sleep(600)
+    await query.message.delete()
+    
 
 @Client.on_callback_query()
 async def cb_handler(client: Client, query: CallbackQuery):
@@ -1527,232 +1480,457 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.message.edit_reply_markup(reply_markup)
     await query.answer(MSG_ALRT)
 
-    
 async def auto_filter(client, msg, spoll=False):
-    reqstr1 = msg.from_user.id if msg.from_user else 0
-    reqstr = await client.get_users(reqstr1)
     if not spoll:
-        message = msg
-        settings = await get_settings(message.chat.id)
-        if message.text.startswith("/"): return  # ignore commands
-        if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
-            return
-        if len(message.text) < 100:
-            search = message.text
-            files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), offset=0, filter=True)
-            if not files:
-                if settings["spell_check"]:
-                    return await advantage_spell_chok(client, msg)
-                else:
-                    if NO_RESULTS_MSG:
-                        await client.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, search)))
-                    return
+        mes = msg
+    else:
+        mes = msg.message.reply_to_message
+    if type(mes) == type(None):
+        reqstr1 = msg.from_user.id if msg.from_user else 0
+        reqstr = await client.get_users(reqstr1)
+        if not spoll:
+            message = msg
+            settings = await get_settings(message.chat.id)
+            if message.text.startswith("/"): return  # ignore commands
+            if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
+                return
+            if len(message.text) < 100:
+                search = message.text
+                files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), offset=0, filter=True)
+                if not files:
+                    if settings["spell_check"]:
+                        return await advantage_spell_chok(client, msg)
+                    else:
+                        if NO_RESULTS_MSG:
+                            await client.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, search)))
+                        return
+            else:
+                return
         else:
-            return
-    else:
-        message = msg.message.reply_to_message  # msg will be callback query
-        search, files, offset, total_results = spoll
-        settings = await get_settings(message.chat.id)
-    temp.SEND_ALL_TEMP[message.from_user.id] = files
-    temp.KEYWORD[message.from_user.id] = search
-    if 'is_shortlink' in settings.keys():
-        ENABLE_SHORTLINK = settings['is_shortlink']
-    else:
-        await save_group_settings(message.chat.id, 'is_shortlink', False)
-        ENABLE_SHORTLINK = False
-    pre = 'filep' if settings['file_secure'] else 'file'
-    if ENABLE_SHORTLINK and settings["button"]:
-        btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"[{get_size(file.file_size)}] {file.file_name}", url=await get_shortlink(message.chat.id, f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
-                ),
+            message = msg.message
+            search, files, offset, total_results = spoll
+            settings = temp_settings
+        temp.SEND_ALL_TEMP[msg.from_user.id] = files
+        temp.KEYWORD[msg.from_user.id] = search
+        if 'is_shortlink' in settings.keys():
+            ENABLE_SHORTLINK = settings['is_shortlink']
+        else:
+            ENABLE_SHORTLINK = False
+        pre = 'filep' if settings['file_secure'] else 'file'
+        if ENABLE_SHORTLINK and settings["button"]:
+            btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"[{get_size(file.file_size)}] {file.file_name}", url=await get_shortlink(message.chat.id, f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
+                    ),
+                ]
+                for file in files
             ]
-            for file in files
-        ]
-    elif ENABLE_SHORTLINK and not settings["button"]:
-        btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"{file.file_name}",
-                    url=await get_shortlink(message.chat.id, f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
-                ),
-                InlineKeyboardButton(
-                    text=f"{get_size(file.file_size)}",
-                    url=await get_shortlink(message.chat.id, f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
-                ),
+        elif ENABLE_SHORTLINK and not settings["button"]:
+            btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"{file.file_name}",
+                        url=await get_shortlink(message.chat.id, f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
+                    ),
+                    InlineKeyboardButton(
+                        text=f"{get_size(file.file_size)}",
+                        url=await get_shortlink(message.chat.id, f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
+                    ),
+                ]
+                for file in files
             ]
-            for file in files
-        ]
-    elif settings["button"] and not ENABLE_SHORTLINK:
-        btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'{pre}#{file.file_id}'
-                ),
+        elif settings["button"] and not ENABLE_SHORTLINK:
+            btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'{pre}#{file.file_id}'
+                    ),
+                ]
+                for file in files
             ]
-            for file in files
-        ]
-    else:
-        btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"{file.file_name}",
-                    callback_data=f'{pre}#{file.file_id}',
-                ),
-                InlineKeyboardButton(
-                    text=f"{get_size(file.file_size)}",
-                    callback_data=f'{pre}#{file.file_id}',
-                ),
+        else:
+            btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"{file.file_name}",
+                        callback_data=f'{pre}#{file.file_id}',
+                    ),
+                    InlineKeyboardButton(
+                        text=f"{get_size(file.file_size)}",
+                        callback_data=f'{pre}#{file.file_id}',
+                    ),
+                ]
+                for file in files
             ]
-            for file in files
-        ]
-    try:
-        if settings['auto_delete']:
+        try:
+            if settings['auto_delete']:
+                btn.insert(0, 
+                    [
+                        InlineKeyboardButton(f'Info', 'reqinfo'),
+                        InlineKeyboardButton(f'Movies', 'minfo'),
+                        InlineKeyboardButton(f'Series', 'sinfo')
+                    ]
+                )
+            else:
+                btn.insert(0, 
+                    [
+                        InlineKeyboardButton(f'Movie', 'minfo'),
+                        InlineKeyboardButton(f'Series', 'sinfo')
+                    ]
+                )       
+        except KeyError:
             btn.insert(0, 
                 [
                     InlineKeyboardButton(f'Info', 'reqinfo'),
-                    InlineKeyboardButton(f'Movies', 'minfo'),
-                    InlineKeyboardButton(f'Series', 'sinfo')
-                ]
-            )
-        else:
-            btn.insert(0, 
-                [
                     InlineKeyboardButton(f'Movie', 'minfo'),
                     InlineKeyboardButton(f'Series', 'sinfo')
                 ]
-            )       
-    except KeyError:
-        await save_group_settings(message.chat.id, 'auto_delete', True)
-        btn.insert(0, 
-            [
-                InlineKeyboardButton(f'Info', 'reqinfo'),
-                InlineKeyboardButton(f'Movie', 'minfo'),
-                InlineKeyboardButton(f'Series', 'sinfo')
-            ]
-        )
+            )
 
-    btn.insert(0, [
-        InlineKeyboardButton("! Send All To PM !", callback_data=f"send_fall#{pre}#{0}#{message.from_user.id}")
-    ])
+        btn.insert(0, [
+            InlineKeyboardButton("! Send All To PM !", callback_data=f"send_fall#{pre}#{0}#{msg.from_user.id}")
+        ])
 
-    btn.insert(0, [
-        InlineKeyboardButton("⚡ Check Bot PM ⚡", url=f"https://t.me/{temp.U_NAME}")
-    ])
+        btn.insert(0, [
+            InlineKeyboardButton("⚡ Check Bot PM ⚡", url=f"https://t.me/{temp.U_NAME}")
+        ])
 
-    if offset != "":
-        key = f"{message.chat.id}-{message.id}"
-        BUTTONS[key] = search
-        req = message.from_user.id if message.from_user else 0
-        try:
-            if settings['max_btn']:
+        if offset != "":
+            key = f"{msg.message.chat.id}-{msg.message.id}"
+            BUTTONS[key] = search
+            req = msg.from_user.id if msg.from_user else 0
+            try:
+                if settings['max_btn']:
+                    btn.append(
+                        [InlineKeyboardButton("📃 𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/10)}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
+                    )
+                else:
+                    btn.append(
+                        [InlineKeyboardButton("📃 𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/int(MAX_B_TN))}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
+                    )
+            except KeyError:
                 btn.append(
                     [InlineKeyboardButton("📃 𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/10)}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
                 )
-            else:
-                btn.append(
-                    [InlineKeyboardButton("📃 𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/int(MAX_B_TN))}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
-                )
-        except KeyError:
-            await save_group_settings(message.chat.id, 'max_btn', True)
+        else:
             btn.append(
-                [InlineKeyboardButton("📃 𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/10)}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
+                [InlineKeyboardButton(text="𝐍𝐎 𝐌𝐎𝐑𝐄 𝐏𝐀𝐆𝐄𝐒 𝐀𝐕𝐀𝐈𝐋𝐀𝐁𝐋𝐄",callback_data="pages")]
             )
-    else:
-        btn.append(
-            [InlineKeyboardButton(text="𝐍𝐎 𝐌𝐎𝐑𝐄 𝐏𝐀𝐆𝐄𝐒 𝐀𝐕𝐀𝐈𝐋𝐀𝐁𝐋𝐄",callback_data="pages")]
-        )
-    imdb = await get_poster(search, file=(files[0]).file_name) if settings["imdb"] else None
-    TEMPLATE = settings['template']
-    if imdb:
-        cap = TEMPLATE.format(
-            query=search,
-            title=imdb['title'],
-            votes=imdb['votes'],
-            aka=imdb["aka"],
-            seasons=imdb["seasons"],
-            box_office=imdb['box_office'],
-            localized_title=imdb['localized_title'],
-            kind=imdb['kind'],
-            imdb_id=imdb["imdb_id"],
-            cast=imdb["cast"],
-            runtime=imdb["runtime"],
-            countries=imdb["countries"],
-            certificates=imdb["certificates"],
-            languages=imdb["languages"],
-            director=imdb["director"],
-            writer=imdb["writer"],
-            producer=imdb["producer"],
-            composer=imdb["composer"],
-            cinematographer=imdb["cinematographer"],
-            music_team=imdb["music_team"],
-            distributors=imdb["distributors"],
-            release_date=imdb['release_date'],
-            year=imdb['year'],
-            genres=imdb['genres'],
-            poster=imdb['poster'],
-            plot=imdb['plot'],
-            rating=imdb['rating'],
-            url=imdb['url'],
-            **locals()
-        )
-    else:
-        cap = f"<b>Hᴇʏ {message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>"
-    if imdb and imdb.get('poster'):
-        try:
-            hehe = await message.reply_photo(photo=imdb.get('poster'), caption=cap[:1024], reply_markup=InlineKeyboardMarkup(btn))
+        imdb = await get_poster(search, file=(files[0]).file_name) if settings["imdb"] else None
+        TEMPLATE = settings['template']
+        if imdb:
+            cap = TEMPLATE.format(
+                query=search,
+                title=imdb['title'],
+                votes=imdb['votes'],
+                aka=imdb["aka"],
+                seasons=imdb["seasons"],
+                box_office=imdb['box_office'],
+                localized_title=imdb['localized_title'],
+                kind=imdb['kind'],
+                imdb_id=imdb["imdb_id"],
+                cast=imdb["cast"],
+                runtime=imdb["runtime"],
+                countries=imdb["countries"],
+                certificates=imdb["certificates"],
+                languages=imdb["languages"],
+                director=imdb["director"],
+                writer=imdb["writer"],
+                producer=imdb["producer"],
+                composer=imdb["composer"],
+                cinematographer=imdb["cinematographer"],
+                music_team=imdb["music_team"],
+                distributors=imdb["distributors"],
+                release_date=imdb['release_date'],
+                year=imdb['year'],
+                genres=imdb['genres'],
+                poster=imdb['poster'],
+                plot=imdb['plot'],
+                rating=imdb['rating'],
+                url=imdb['url'],
+                **locals()
+            )
+        else:
+            cap = f"<b>Hᴇʏ {msg.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>"
+        if imdb and imdb.get('poster'):
             try:
-                if settings['auto_delete']:
+                hehe = await msg.message.reply_photo(photo=imdb.get('poster'), caption=cap[:1024], reply_markup=InlineKeyboardMarkup(btn))
+                try:
+                    if settings['auto_delete']:
+                        await asyncio.sleep(600)
+                        await hehe.delete()
+                        await message.delete()
+                except KeyError:
                     await asyncio.sleep(600)
                     await hehe.delete()
                     await message.delete()
-            except KeyError:
-                await save_group_settings(message.chat.id, 'auto_delete', True)
-                await asyncio.sleep(600)
-                await hehe.delete()
-                await message.delete()
-        except (MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty):
-            pic = imdb.get('poster')
-            poster = pic.replace('.jpg', "._V1_UX360.jpg")
-            hmm = await message.reply_photo(photo=poster, caption=cap[:1024], reply_markup=InlineKeyboardMarkup(btn))
-            try:
-                if settings['auto_delete']:
+            except (MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty):
+                pic = imdb.get('poster')
+                poster = pic.replace('.jpg', "._V1_UX360.jpg")
+                hmm = await msg.message.reply_photo(photo=poster, caption=cap[:1024], reply_markup=InlineKeyboardMarkup(btn))
+                try:
+                    if settings['auto_delete']:
+                        await asyncio.sleep(600)
+                        await hmm.delete()
+                        await message.delete()
+                except KeyError:
                     await asyncio.sleep(600)
                     await hmm.delete()
                     await message.delete()
-            except KeyError:
-                await save_group_settings(message.chat.id, 'auto_delete', True)
-                await asyncio.sleep(600)
-                await hmm.delete()
-                await message.delete()
-        except Exception as e:
-            logger.exception(e)
-            fek = await message.reply_photo(photo=NOR_IMG, caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+            except Exception as e:
+                logger.exception(e)
+                fek = await msg.message.reply_photo(photo=NOR_IMG, caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+                try:
+                    if settings['auto_delete']:
+                        await asyncio.sleep(600)
+                        await fek.delete()
+                        await message.delete()
+                except KeyError:
+                    await asyncio.sleep(600)
+                    await fek.delete()
+                    await message.delete()
+        else:
+            fuk = await msg.message.reply_photo(photo=NOR_IMG, caption=cap, reply_markup=InlineKeyboardMarkup(btn))
             try:
                 if settings['auto_delete']:
                     await asyncio.sleep(600)
+                    await fuk.delete()
+                    await message.delete()
+            except KeyError:
+                await asyncio.sleep(600)
+                await fuk.delete()
+                await message.delete()
+        if spoll:
+            await msg.message.delete()
+    else:
+        reqstr1 = msg.from_user.id if msg.from_user else 0
+        reqstr = await client.get_users(reqstr1)
+        if not spoll:
+            message = msg
+            settings = await get_settings(message.chat.id)
+            if message.text.startswith("/"): return  # ignore commands
+            if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
+                return
+            if len(message.text) < 100:
+                search = message.text
+                files, offset, total_results = await get_search_results(message.chat.id ,search.lower(), offset=0, filter=True)
+                if not files:
+                    if settings["spell_check"]:
+                        return await advantage_spell_chok(client, msg)
+                    else:
+                        if NO_RESULTS_MSG:
+                            await client.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, search)))
+                        return
+            else:
+                return
+        else:
+            message = msg.message.reply_to_message  # msg will be callback query
+            search, files, offset, total_results = spoll
+            if message and message.chat and hasattr(message.chat, 'id'):
+                settings = await get_settings(message.chat.id)
+            else:
+                settings = temp_settings
+        temp.SEND_ALL_TEMP[message.from_user.id] = files
+        temp.KEYWORD[message.from_user.id] = search
+        if 'is_shortlink' in settings.keys():
+            ENABLE_SHORTLINK = settings['is_shortlink']
+        else:
+            await save_group_settings(message.chat.id, 'is_shortlink', False)
+            ENABLE_SHORTLINK = False
+        pre = 'filep' if settings['file_secure'] else 'file'
+        if ENABLE_SHORTLINK and settings["button"]:
+            btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"[{get_size(file.file_size)}] {file.file_name}", url=await get_shortlink(message.chat.id, f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
+                    ),
+                ]
+                for file in files
+            ]
+        elif ENABLE_SHORTLINK and not settings["button"]:
+            btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"{file.file_name}",
+                        url=await get_shortlink(message.chat.id, f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
+                    ),
+                    InlineKeyboardButton(
+                        text=f"{get_size(file.file_size)}",
+                        url=await get_shortlink(message.chat.id, f"https://telegram.dog/{temp.U_NAME}?start=files_{file.file_id}")
+                    ),
+                ]
+                for file in files
+            ]
+        elif settings["button"] and not ENABLE_SHORTLINK:
+            btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'{pre}#{file.file_id}'
+                    ),
+                ]
+                for file in files
+            ]
+        else:
+            btn = [
+                [
+                    InlineKeyboardButton(
+                        text=f"{file.file_name}",
+                        callback_data=f'{pre}#{file.file_id}',
+                    ),
+                    InlineKeyboardButton(
+                        text=f"{get_size(file.file_size)}",
+                        callback_data=f'{pre}#{file.file_id}',
+                    ),
+                ]
+                for file in files
+            ]
+        try:
+            if settings['auto_delete']:
+                btn.insert(0, 
+                    [
+                        InlineKeyboardButton(f'Info', 'reqinfo'),
+                        InlineKeyboardButton(f'Movies', 'minfo'),
+                        InlineKeyboardButton(f'Series', 'sinfo')
+                    ]
+                )
+            else:
+                btn.insert(0, 
+                    [
+                        InlineKeyboardButton(f'Movie', 'minfo'),
+                        InlineKeyboardButton(f'Series', 'sinfo')
+                    ]
+                )       
+        except KeyError:
+            await save_group_settings(message.chat.id, 'auto_delete', True)
+            btn.insert(0, 
+                [
+                    InlineKeyboardButton(f'Info', 'reqinfo'),
+                    InlineKeyboardButton(f'Movie', 'minfo'),
+                    InlineKeyboardButton(f'Series', 'sinfo')
+                ]
+            )
+
+        btn.insert(0, [
+            InlineKeyboardButton("! Send All To PM !", callback_data=f"send_fall#{pre}#{0}#{message.from_user.id}")
+        ])
+
+        btn.insert(0, [
+            InlineKeyboardButton("⚡ Check Bot PM ⚡", url=f"https://t.me/{temp.U_NAME}")
+        ])
+
+        if offset != "":
+            key = f"{message.chat.id}-{message.id}"
+            BUTTONS[key] = search
+            req = message.from_user.id if message.from_user else 0
+            try:
+                if settings['max_btn']:
+                    btn.append(
+                        [InlineKeyboardButton("📃 𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/10)}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
+                    )
+                else:
+                    btn.append(
+                        [InlineKeyboardButton("📃 𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/int(MAX_B_TN))}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
+                    )
+            except KeyError:
+                await save_group_settings(message.chat.id, 'max_btn', True)
+                btn.append(
+                    [InlineKeyboardButton("📃 𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/10)}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
+                )
+        else:
+            btn.append(
+                [InlineKeyboardButton(text="𝐍𝐎 𝐌𝐎𝐑𝐄 𝐏𝐀𝐆𝐄𝐒 𝐀𝐕𝐀𝐈𝐋𝐀𝐁𝐋𝐄",callback_data="pages")]
+            )
+        imdb = await get_poster(search, file=(files[0]).file_name) if settings["imdb"] else None
+        TEMPLATE = settings['template']
+        if imdb:
+            cap = TEMPLATE.format(
+                query=search,
+                title=imdb['title'],
+                votes=imdb['votes'],
+                aka=imdb["aka"],
+                seasons=imdb["seasons"],
+                box_office=imdb['box_office'],
+                localized_title=imdb['localized_title'],
+                kind=imdb['kind'],
+                imdb_id=imdb["imdb_id"],
+                cast=imdb["cast"],
+                runtime=imdb["runtime"],
+                countries=imdb["countries"],
+                certificates=imdb["certificates"],
+                languages=imdb["languages"],
+                director=imdb["director"],
+                writer=imdb["writer"],
+                producer=imdb["producer"],
+                composer=imdb["composer"],
+                cinematographer=imdb["cinematographer"],
+                music_team=imdb["music_team"],
+                distributors=imdb["distributors"],
+                release_date=imdb['release_date'],
+                year=imdb['year'],
+                genres=imdb['genres'],
+                poster=imdb['poster'],
+                plot=imdb['plot'],
+                rating=imdb['rating'],
+                url=imdb['url'],
+                **locals()
+            )
+        else:
+            cap = f"<b>Hᴇʏ {message.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>"
+        if imdb and imdb.get('poster'):
+            try:
+                hehe = await message.reply_photo(photo=imdb.get('poster'), caption=cap[:1024], reply_markup=InlineKeyboardMarkup(btn))
+                try:
+                    if settings['auto_delete']:
+                        await asyncio.sleep(600)
+                        await hehe.delete()
+                        await message.delete()
+                except KeyError:
+                    await save_group_settings(message.chat.id, 'auto_delete', True)
+                    await asyncio.sleep(600)
+                    await hehe.delete()
+                    await message.delete()
+            except (MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty):
+                pic = imdb.get('poster')
+                poster = pic.replace('.jpg', "._V1_UX360.jpg")
+                hmm = await message.reply_photo(photo=poster, caption=cap[:1024], reply_markup=InlineKeyboardMarkup(btn))
+                try:
+                    if settings['auto_delete']:
+                        await asyncio.sleep(600)
+                        await hmm.delete()
+                        await message.delete()
+                except KeyError:
+                    await save_group_settings(message.chat.id, 'auto_delete', True)
+                    await asyncio.sleep(600)
+                    await hmm.delete()
+                    await message.delete()
+            except Exception as e:
+                logger.exception(e)
+                fek = await message.reply_photo(photo=NOR_IMG, caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+                try:
+                    if settings['auto_delete']:
+                        await asyncio.sleep(600)
+                        await fek.delete()
+                        await message.delete()
+                except KeyError:
+                    await save_group_settings(message.chat.id, 'auto_delete', True)
+                    await asyncio.sleep(600)
                     await fek.delete()
+                    await message.delete()
+        else:
+            fuk = await message.reply_photo(photo=NOR_IMG, caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+            try:
+                if settings['auto_delete']:
+                    await asyncio.sleep(600)
+                    await fuk.delete()
                     await message.delete()
             except KeyError:
                 await save_group_settings(message.chat.id, 'auto_delete', True)
                 await asyncio.sleep(600)
-                await fek.delete()
-                await message.delete()
-    else:
-        fuk = await message.reply_photo(photo=NOR_IMG, caption=cap, reply_markup=InlineKeyboardMarkup(btn))
-        try:
-            if settings['auto_delete']:
-                await asyncio.sleep(600)
                 await fuk.delete()
                 await message.delete()
-        except KeyError:
-            await save_group_settings(message.chat.id, 'auto_delete', True)
-            await asyncio.sleep(600)
-            await fuk.delete()
-            await message.delete()
-    if spoll:
-        await msg.message.delete()
+        if spoll:
+            await msg.message.delete()
 
 
 async def advantage_spell_chok(client, msg):
@@ -1806,12 +1984,12 @@ async def advantage_spell_chok(client, msg):
         [
             InlineKeyboardButton(
                 text=movie_name.strip(),
-                callback_data=f"spol#{reqstr1}#{k}",
+                callback_data=f"spol#{reqstr1}#{mv_id}#{k}",
             )
         ]
         for k, movie_name in enumerate(movielist)
     ]
-    btn.append([InlineKeyboardButton(text="Close", callback_data=f'spol#{reqstr1}#close_spellcheck')])
+    btn.append([InlineKeyboardButton(text="Close", callback_data=f'spol#{reqstr1}#{mv_id}#close_spellcheck')])
     spell_check_del = await msg.reply_photo(
         photo=(SPELL_IMG),
         caption=(script.CUDNT_FND.format(mv_rqst)),
