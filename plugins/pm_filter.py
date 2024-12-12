@@ -4,7 +4,6 @@ import re
 import ast
 import math
 import random
-import uuid
 lock = asyncio.Lock()
 
 from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
@@ -37,7 +36,6 @@ logger.setLevel(logging.ERROR)
 
 BUTTONS = {}
 SPELL_CHECK = {}
-
 temp_settings = {
   'button': True,
   'botpm': False,
@@ -1509,7 +1507,7 @@ async def auto_filter(client, msg, spoll=False):
             else:
                 return
         else:
-            message = msg.message  # msg will be callback query
+            message = msg.message
             search, files, offset, total_results = spoll
             settings = temp_settings
         temp.SEND_ALL_TEMP[msg.from_user.id] = files
@@ -1689,7 +1687,6 @@ async def auto_filter(client, msg, spoll=False):
                         await fek.delete()
                         await message.delete()
                 except KeyError:
-                    #await save_group_settings(message.chat.id, 'auto_delete', True)
                     await asyncio.sleep(600)
                     await fek.delete()
                     await message.delete()
