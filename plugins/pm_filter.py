@@ -46,7 +46,7 @@ temp_settings = {
   'spell_check': True,
   'welcome': True,
   'template':
-    "Hey ,\nHere is the result for your <code>{query}</code>\n\n<b>🏷 Title</b>: <a href={url}>{title}</a>\n\n🎭 Genres: {genres}\n\n📆 Year: <a href={url}/releaseinfo>{year}</a>\n\n🌟 Rating: <a href={url}/ratings>{rating}</a> / 10 (based on {votes} user ratings.)\n\n📀 RunTime: {runtime} Minutes\n\n📆 Release Info : {release_date}\n\nPowered By↝ <b>@SKMovies_Request</b>",
+    "Hey {msg.from_user.mention},\nHere is the result for your <code>{query}</code>\n\n<b>🏷 Title</b>: <a href={url}>{title}</a>\n\n🎭 Genres: {genres}\n\n📆 Year: <a href={url}/releaseinfo>{year}</a>\n\n🌟 Rating: <a href={url}/ratings>{rating}</a> / 10 (based on {votes} user ratings.)\n\n📀 RunTime: {runtime} Minutes\n\n📆 Release Info : {release_date}\n\nPowered By↝ <b>@SKMovies_Request</b>",
   'max_btn': True,
   'auto_ffilter': True,
   'is_shortlink': False,
@@ -1599,9 +1599,9 @@ async def auto_filter(client, msg, spoll=False):
         ])
 
         if offset != "":
-            key = f"{message.chat.id}-{message.id}"
+            key = f"{msg.message.chat.id}-{msg.message.id}"
             BUTTONS[key] = search
-            req = userid
+            req = msg.from_user.id if msg.from_user else 0
             try:
                 if settings['max_btn']:
                     btn.append(
@@ -1612,7 +1612,6 @@ async def auto_filter(client, msg, spoll=False):
                         [InlineKeyboardButton("📃 𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/int(MAX_B_TN))}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
                     )
             except KeyError:
-                #await save_group_settings(message.chat.id, 'max_btn', True)
                 btn.append(
                     [InlineKeyboardButton("📃 𝐏𝐀𝐆𝐄", callback_data="pages"), InlineKeyboardButton(text=f"1/{math.ceil(int(total_results)/10)}",callback_data="pages"), InlineKeyboardButton(text="𝐍𝐄𝐗𝐓 ➪",callback_data=f"next_{req}_{key}_{offset}")]
                 )
@@ -1655,7 +1654,7 @@ async def auto_filter(client, msg, spoll=False):
                 **locals()
             )
         else:
-            cap = f"<b>Hᴇʏ, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>"
+            cap = f"<b>Hᴇʏ {msg.from_user.mention}, Hᴇʀᴇ ɪs Wʜᴀᴛ I Fᴏᴜɴᴅ Iɴ Mʏ Dᴀᴛᴀʙᴀsᴇ Fᴏʀ Yᴏᴜʀ Qᴜᴇʀʏ {search}.</b>"
         if imdb and imdb.get('poster'):
             try:
                 hehe = await msg.message.reply_photo(photo=imdb.get('poster'), caption=cap[:1024], reply_markup=InlineKeyboardMarkup(btn))
@@ -1731,7 +1730,6 @@ async def auto_filter(client, msg, spoll=False):
         else:
             message = msg.message.reply_to_message  # msg will be callback query
             search, files, offset, total_results = spoll
-            print(message, msg)
             if message and message.chat and hasattr(message.chat, 'id'):
                 settings = await get_settings(message.chat.id)
             else:
