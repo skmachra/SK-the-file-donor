@@ -429,7 +429,7 @@ async def select_language(bot, query):
 @Client.on_callback_query(filters.regex(r"^spol"))
 async def advantage_spoll_choker(bot, query):
     _, user, mv, movie_ = query.data.split('#')
-    movies = SPELL_CHECK.get(int(mv))
+    movies = SPELL_CHECK.get(int(query.id))
     if not movies:
         return await query.answer(script.OLD_ALRT_TXT.format(query.from_user.first_name), show_alert=True)
     if int(user) != 0 and query.from_user.id != int(user):
@@ -1512,10 +1512,8 @@ async def auto_filter(client, msg, spoll=False):
             message = msg.message  # msg will be callback query
             search, files, offset, total_results = spoll
             settings = temp_settings
-            userid = random.randint(100000000, 999999999)
-            msid = random.randint(100, 999)
-        temp.SEND_ALL_TEMP[userid] = files
-        temp.KEYWORD[userid] = search
+        temp.SEND_ALL_TEMP[msg.from_user.id] = files
+        temp.KEYWORD[msg.from_user.id] = search
         if 'is_shortlink' in settings.keys():
             ENABLE_SHORTLINK = settings['is_shortlink']
         else:
@@ -1593,7 +1591,7 @@ async def auto_filter(client, msg, spoll=False):
             )
 
         btn.insert(0, [
-            InlineKeyboardButton("! Send All To PM !", callback_data=f"send_fall#{pre}#{0}#{userid}")
+            InlineKeyboardButton("! Send All To PM !", callback_data=f"send_fall#{pre}#{0}#{msg.from_user.id}")
         ])
 
         btn.insert(0, [
@@ -1601,7 +1599,7 @@ async def auto_filter(client, msg, spoll=False):
         ])
 
         if offset != "":
-            key = f"{userid}-{msid}"
+            key = f"{message.chat.id}-{message.id}"
             BUTTONS[key] = search
             req = userid
             try:
@@ -1733,6 +1731,7 @@ async def auto_filter(client, msg, spoll=False):
         else:
             message = msg.message.reply_to_message  # msg will be callback query
             search, files, offset, total_results = spoll
+            print(message, msg)
             if message and message.chat and hasattr(message.chat, 'id'):
                 settings = await get_settings(message.chat.id)
             else:
