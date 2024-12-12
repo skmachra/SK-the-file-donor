@@ -457,8 +457,9 @@ async def advantage_spoll_choker(bot, query):
         await gl.delete()
     if manual:
         await manual.delete()
-
-
+    await asyncio.sleep(600)
+    await query.message.delete()
+    
 
 @Client.on_callback_query()
 async def cb_handler(client: Client, query: CallbackQuery):
