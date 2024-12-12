@@ -39,7 +39,7 @@ BUTTONS = {}
 SPELL_CHECK = {}
 
 temp_settings = {
-  'button': False,
+  'button': True,
   'botpm': False,
   'file_secure': False,
   'imdb': True,
@@ -1742,13 +1742,13 @@ async def auto_filter(client, msg, spoll=False):
             message = msg.message.reply_to_message  # msg will be callback query
             search, files, offset, total_results = spoll
             settings = temp_settings
-            userid = str(uuid.uuid4())
+            userid = random.randint(100000000, 999999999)
+            msid = random.randint(100, 999)
         temp.SEND_ALL_TEMP[userid] = files
         temp.KEYWORD[userid] = search
         if 'is_shortlink' in settings.keys():
             ENABLE_SHORTLINK = settings['is_shortlink']
         else:
-            #await save_group_settings(message.chat.id, 'is_shortlink', False)
             ENABLE_SHORTLINK = False
         pre = 'filep' if settings['file_secure'] else 'file'
         if ENABLE_SHORTLINK and settings["button"]:
@@ -1814,7 +1814,6 @@ async def auto_filter(client, msg, spoll=False):
                     ]
                 )       
         except KeyError:
-            #await save_group_settings(message.chat.id, 'auto_delete', True)
             btn.insert(0, 
                 [
                     InlineKeyboardButton(f'Info', 'reqinfo'),
@@ -1832,9 +1831,9 @@ async def auto_filter(client, msg, spoll=False):
         ])
 
         if offset != "":
-            key = str(uuid.uuid4())
+            key = f"{userid}-{msid}"
             BUTTONS[key] = search
-            req = 9
+            req = userid
             try:
                 if settings['max_btn']:
                     btn.append(
@@ -1898,7 +1897,6 @@ async def auto_filter(client, msg, spoll=False):
                         await hehe.delete()
                         await message.delete()
                 except KeyError:
-                    #await save_group_settings(message.chat.id, 'auto_delete', True)
                     await asyncio.sleep(600)
                     await hehe.delete()
                     await message.delete()
@@ -1912,7 +1910,6 @@ async def auto_filter(client, msg, spoll=False):
                         await hmm.delete()
                         await message.delete()
                 except KeyError:
-                    #await save_group_settings(message.chat.id, 'auto_delete', True)
                     await asyncio.sleep(600)
                     await hmm.delete()
                     await message.delete()
@@ -1937,7 +1934,6 @@ async def auto_filter(client, msg, spoll=False):
                     await fuk.delete()
                     await message.delete()
             except KeyError:
-                #await save_group_settings(message.chat.id, 'auto_delete', True)
                 await asyncio.sleep(600)
                 await fuk.delete()
                 await message.delete()
