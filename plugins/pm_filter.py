@@ -1486,7 +1486,7 @@ async def auto_filter(client, msg, spoll=False):
         message = msg
     else:
         message = msg.message.reply_to_message
-    if type(message) == type(None):
+    if msg.message.chat.type == "ChatType.PRIVATE":
         reqstr1 = msg.from_user.id if msg.from_user else 0
         reqstr = await client.get_users(reqstr1)
         if not spoll:
