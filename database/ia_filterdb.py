@@ -83,6 +83,8 @@ async def get_search_results(chat_id, query, file_type=None, max_results=10, off
                 max_results = 10
             else:
                 max_results = int(MAX_B_TN)
+    else:
+        max_results = 10
     query = query.strip()
     #if filter:
         #better ?
