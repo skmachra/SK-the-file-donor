@@ -49,7 +49,7 @@ async def answer(bot, query):
         file_type = None
 
     offset = int(query.offset or 0)
-    reply_markup = get_reply_markup(query=string)
+    reply_markup = get_reply_markup(string)
     files, next_offset, total = await get_search_results(
                                                   chat_id,
                                                   string,
