@@ -1,4 +1,4 @@
-import logging
+ import logging
 from pyrogram import Client, emoji, filters
 from pyrogram.errors.exceptions.bad_request_400 import QueryIdInvalid
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultCachedDocument, InlineQuery
@@ -82,7 +82,7 @@ async def answer(bot, query):
         if string:
             switch_pm_text += f" for {string}"
         try:
-            await query.answer(query, results=results,
+            await query.answer(results=results,
                            is_personal = True,
                            cache_time=cache_time,
                            switch_pm_text=switch_pm_text,
