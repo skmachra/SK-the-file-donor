@@ -9,7 +9,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from marshmallow.exceptions import ValidationError
 from info import DATABASE_URI, DATABASE_NAME, COLLECTION_NAME, USE_CAPTION_FILTER, MAX_B_TN
 from utils import get_settings, save_group_settings
-import time
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -85,8 +84,7 @@ async def get_search_results(chat_id, query, file_type=None, max_results=10, off
             else:
                 max_results = int(MAX_B_TN)
     else:
-        max_results = 5
-        print("used this")
+        max_results = 10
     query = query.strip()
     #if filter:
         #better ?
@@ -100,44 +98,30 @@ async def get_search_results(chat_id, query, file_type=None, max_results=10, off
         raw_pattern = query.replace(' ', r'.*[\s\.\+\-_()\[\]]')
     
     try:
-        e = time.time()
         regex = re.compile(raw_pattern, flags=re.IGNORECASE)
-        t = time.time()
-        print(f"Execution time rege: {t-e:.2f} seconds for {query}")
     except:
         return []
 
     if USE_CAPTION_FILTER:
-        f = time.time()
         filter = {'$or': [{'file_name': regex}, {'caption': regex}]}
-        g = time.time()
-        print(f"Execution time usecap: {g-f:.2f} seconds for {query}")
     else:
         filter = {'file_name': regex}
 
     if file_type:
         filter['file_type'] = file_type
-    r = time.time()
+    #5 sec
     total_results = await Media.count_documents(filter)
-    s = time.time()
-    print(f"Execution time total res: {s-r:.2f} seconds for {query}")
     next_offset = offset + max_results
 
     if next_offset > total_results:
         next_offset = ''
-    a = time.time()
     cursor = Media.find(filter)
-    b = time.time()
-    print(f"Execution time curfind: {b-a:.2f} seconds for {query}")
     # Sort by recent
     cursor.sort('$natural', -1)
     # Slice files according to offset and max results
     cursor.skip(offset).limit(max_results)
-    # Get list of files
-    n = time.time()
+    # Get list of file. (6s
     files = await cursor.to_list(length=max_results)
-    m = time.time()
-    print(f"Execution time filescur: {m-n:.2f} seconds for {query}")
 
     return files, next_offset, total_results
 
