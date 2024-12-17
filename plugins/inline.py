@@ -60,7 +60,7 @@ async def answer(bot, query):
                                                   max_results=10,
                                                   offset=offset)
     et = time.time()
-    print(f"Search results fetched in {et - nt:.2f} seconds")
+    print(f"Search results fetched in {et - nt:.2f} seconds for {query.from_user.id}")
     for file in files:
         title=file.file_name
         size=get_size(file.file_size)
@@ -94,7 +94,7 @@ async def answer(bot, query):
                            next_offset=str(next_offset))
         except QueryIdInvalid:
             end_time = time.time()
-            logging.info(f"fetched in {end_time - start_time:.2f} seconds")
+            logging.info(f"fetched in {end_time - start_time:.2f} seconds  {query.from_user.id}")
             logging.error(f"Query ID {query.id} is invalid or expired.")
         except Exception as e:
             logging.exception(str(e))
