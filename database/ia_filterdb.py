@@ -70,7 +70,7 @@ async def save_file(media):
 async def get_search_results(chat_id, query, file_type=None, max_results=10, offset=0, filter=False):
     """For given query return (results, next_offset)"""
     if chat_id is None:
-        max_results = 20
+        max_results = 10
         query = query.strip()
         if not query:
             raw_pattern = '.'
@@ -93,7 +93,7 @@ async def get_search_results(chat_id, query, file_type=None, max_results=10, off
             filter['file_type'] = file_type
         #5 sec
         #total_results = await Media.count_documents(filter)
-        total_results = 20
+        total_results = 10
         next_offset = offset + max_results
 
         #if next_offset > total_results:
