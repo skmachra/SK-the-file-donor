@@ -64,8 +64,38 @@ async def save_file(media):
         else:
             logger.info(f'{getattr(media, "file_name", "NO_FILE")} is saved to database')
             return True, 1
+async def get_search_for_inline(query, file_type=None, max_results=10, offset=0, filter=False):
+    query = query.strip()
+    if not query:
+        raw_pattern = '.'
+    elif ' ' not in query:
+        raw_pattern = r'(\b|[\.\+\-_])' + query + r'(\b|[\.\+\-_])'
+    else:
+        raw_pattern = query.replace(' ', r'.*[\s\.\+\-_()\[\]]')
 
+    try:
+        regex = re.compile(raw_pattern, flags=re.IGNORECASE)
+    except:
+        return []
 
+    filter = {'file_name': regex}
+
+    if file_type:
+        filter['file_type'] = file_type
+    total_results = 10
+    next_offset = offset + max_results
+
+    if next_offset > total_results:
+        next_offset = ''
+    cursor = Media.find(filter)
+    # Sort by recent
+    cursor.sort('$natural', -1)
+    # Slice files according to offset and max results
+    cursor.skip(offset).limit(max_results)
+    # Get list of file. (6s
+    files = await cursor.to_list(length=max_results)
+
+    return files, next_offset, total_results
 
 async def get_search_results(chat_id, query, file_type=None, max_results=10, offset=0, filter=False):
     """For given query return (results, next_offset)"""
