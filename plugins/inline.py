@@ -1,4 +1,5 @@
 import logging
+import time
 from pyrogram import Client, emoji, filters
 from pyrogram.errors.exceptions.bad_request_400 import QueryIdInvalid
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultCachedDocument, InlineQuery
@@ -23,6 +24,7 @@ async def inline_users(query: InlineQuery):
 @Client.on_inline_query()
 async def answer(bot, query):
     """Show search results for given inline query"""
+    start_time = time.time()
     chat_id = await active_connection(str(query.from_user.id))
     
     if not await inline_users(query):
@@ -50,13 +52,15 @@ async def answer(bot, query):
 
     offset = int(query.offset or 0)
     reply_markup = get_reply_markup(string)
+    nt = time.time()
     files, next_offset, total = await get_search_results(
                                                   chat_id,
                                                   string,
                                                   file_type=file_type,
                                                   max_results=10,
                                                   offset=offset)
-
+    et = time.time()
+    print(f"Search results fetched in {et - nt:.2f} seconds")
     for file in files:
         title=file.file_name
         size=get_size(file.file_size)
@@ -89,6 +93,8 @@ async def answer(bot, query):
                            switch_pm_parameter="start",
                            next_offset=str(next_offset))
         except QueryIdInvalid:
+            end_time = time.time()
+            logging.info(f"fetched in {end_time - start_time:.2f} seconds")
             logging.error(f"Query ID {query.id} is invalid or expired.")
         except Exception as e:
             logging.exception(str(e))
