@@ -19,6 +19,11 @@ async def get_custom_users():
 # https://t.me/GetTGLink/4178
 async def verupikkals(bot, message):
     users = await db.get_all_users()
+    try:
+        cmd_parts = message.text.split(" ")
+        start_index = int(cmd_parts[1]) if len(cmd_parts) > 1 else 0
+    except ValueError:
+        return await message.reply_text("Invalid input. Use /broadcast <number>.")
     # users = get_custom_users()
     b_msg = message.reply_to_message
     sts = await message.reply_text(
@@ -30,9 +35,12 @@ async def verupikkals(bot, message):
     blocked = 0
     deleted = 0
     failed =0
-
+    skipped = 0
     success = 0
     async for user in users:
+        if skipped < offset:
+            skipped += 1
+            continue
         pti, sh = await broadcast_messages(int(user['id']), b_msg)
         if pti:
             success += 1
