@@ -21,7 +21,7 @@ async def verupikkals(bot, message):
     users = await db.get_all_users()
     try:
         cmd_parts = message.text.split(" ")
-        start_index = int(cmd_parts[1]) if len(cmd_parts) > 1 else 0
+        offset = int(cmd_parts[1]) if len(cmd_parts) > 1 else 0
     except ValueError:
         return await message.reply_text("Invalid input. Use /broadcast <number>.")
     # users = get_custom_users()
