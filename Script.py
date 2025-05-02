@@ -186,6 +186,7 @@ Example : Loki S01E01
     CAPTION = """
     <b><a href=https://telegram.me/+_zbzjL-nCYYzYTk1>{file_name}</a>
 
+🌹Live Sports↝ <a href=https://telegram.me/+uii9VCuMDANhYzA1>@PowerPlayLive</a>
 🌹Join↝ @moviehub1751
 🌹Search Movie↝ @Movies_0_bot</b>"""
 
