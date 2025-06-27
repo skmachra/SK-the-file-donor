@@ -188,7 +188,7 @@ Example : Loki S01E01
 
 🌹Live Sports↝ <a href=https://telegram.me/+uii9VCuMDANhYzA1>@PowerPlayLive</a>
 🌹Join↝ @moviehub1751
-🌹Search Movie↝ @Movies_0_bot</b>"""
+🌹Search Movie↝ @SK_Movies1_bot</b>"""
 
     IMDB_TEMPLATE_TXT = """
 Hey {message.from_user.mention},
