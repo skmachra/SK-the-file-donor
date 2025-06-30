@@ -447,12 +447,15 @@ async def advantage_spoll_choker(bot, query):
             reqstr1 = query.from_user.id if query.from_user else 0
             reqstr = await bot.get_users(reqstr1)
             await bot.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, movie)))
+        k_msg = None
+
         try:
             k_msg = await query.message.edit(script.MVE_NT_FND)
         except MessageNotModified:
             print("No change needed")
         await asyncio.sleep(10)
-        await k_msg.delete()
+        if k_msg:
+            await k_msg.delete()
         await asyncio.sleep(590)
     if gl:
         await gl.delete()
